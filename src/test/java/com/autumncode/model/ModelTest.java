@@ -7,36 +7,37 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.testng.annotations.Test;
 
+import java.util.function.Consumer;
+
 public class ModelTest {
+    public void doWithSession(Consumer<Session> command) {
+        try (Session session = getSession()) {
+            Transaction tx = session.beginTransaction();
+
+            command.accept(session);
+            if (tx.isActive() &&
+                    !tx.getRollbackOnly()) {
+                tx.commit();
+            } else {
+                tx.rollback();
+            }
+        }
+    }
+
+    private Session getSession() {
+        return SessionManager.openSession();
+    }
+
     @Test
-    public void animalBarnTest() {
-        Session session = SessionManager.openSession();
-        Transaction tx = session.beginTransaction();
-        Barn barn = new Barn();
-        barn.setName("the barn");
-        barn.setAddress("1234 main");
-
-        String[] names = new String[]{"foo", "bar", "baz", "quux"};
-        for (String name : names) {
-            Animal animal = new Animal();
-            animal.setName(name);
-            animal.setBreed("Dog");
-            animal.setBarn(barn);
-            session.save(animal);
-        }
-        session.save(barn);
-
-        tx.commit();
-        session.close();
-
-        session = SessionManager.openSession();
-        tx = session.beginTransaction();
-        Query<Barn> query = session.createQuery("from Barn b", Barn.class);
-        for (Object o : query.list()) {
-            System.out.println(o);
-        }
-        tx.commit();
-        session.close();
-
+    public void modelTest() {
+        doWithSession(session -> {
+            A a=new A();
+            a.setValue("a value");
+            session.save(a);
+        });
+        doWithSession(session -> {
+            Query<A> query=session.createQuery("from A a", A.class);
+            System.out.println(query.list());
+        });
     }
 }
