@@ -2,13 +2,10 @@ package com.autumncode.model;
 
 
 import com.autumncode.db.SessionManager;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class ModelTest {
     @Test
@@ -34,7 +31,7 @@ public class ModelTest {
 
         session = SessionManager.openSession();
         tx = session.beginTransaction();
-        Query query = session.createQuery("from Barn b");
+        Query<Barn> query = session.createQuery("from Barn b", Barn.class);
         for (Object o : query.list()) {
             System.out.println(o);
         }
