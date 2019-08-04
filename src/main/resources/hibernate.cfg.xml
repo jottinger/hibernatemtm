@@ -19,5 +19,7 @@
         <mapping class="com.autumncode.model.B"/>
         <mapping class="com.autumncode.model.C"/>
         <mapping class="com.autumncode.model.D"/>
+        <mapping class="com.autumncode.exonity.Customer1"/>
+        <mapping class="com.autumncode.exonity.Document1"/>
     </session-factory>
 </hibernate-configuration>
