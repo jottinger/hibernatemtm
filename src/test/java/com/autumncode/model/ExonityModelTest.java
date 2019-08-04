@@ -41,8 +41,12 @@ public class ExonityModelTest {
             id[0]=c.getId();
         });
         doWithSession(session -> {
-           Customer1 c=session.find(Customer1.class, id[0]);
-           c.addDocument("document1");
+            Customer1 c=session.find(Customer1.class, id[0]);
+            c.addDocument("document1");
+        });
+        doWithSession(session -> {
+            Customer1 c=session.find(Customer1.class, id[0]);
+            c.addDocument("document2");
         });
         doWithSession(session -> {
             Customer1 c=session.find(Customer1.class, id[0]);
